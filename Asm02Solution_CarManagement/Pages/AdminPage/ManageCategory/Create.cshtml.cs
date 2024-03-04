@@ -6,21 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
 {
     public class CreateModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICategoryService categoryService;
 
-        public CreateModel(BusinessObjects.Models.CarManagementContext context)
+        public CreateModel()
         {
-            _context = context;
+            categoryService = new CategoryService();
         }
 
         public IActionResult OnGet()
         {
-            return Page();
+            if (HttpContext.Session.GetString("Role") == "Admin")
+            {
+                return Page();
+            }
+            return RedirectToPage("/Login");
         }
 
         [BindProperty]
@@ -30,14 +35,7 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Categories == null || Category == null)
-            {
-                return Page();
-            }
-
-            _context.Categories.Add(Category);
-            await _context.SaveChangesAsync();
-
+            Category = categoryService.CreateCategory(Category);
             return RedirectToPage("./Index");
         }
     }

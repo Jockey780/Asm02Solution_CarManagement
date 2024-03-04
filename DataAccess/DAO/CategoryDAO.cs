@@ -116,5 +116,42 @@ namespace DataAccess.DAO
             }
             return category;
         }
+
+        public Category UpdateCategory(Category category)
+        {
+            try
+            {
+                Category checkExisted = GetCategoryById(category.CategoryId);
+                if (checkExisted != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Categories.Update(category);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return category;
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            try
+            {
+                Category category = GetCategoryById(categoryId);
+                if (category != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Categories.Remove(category);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

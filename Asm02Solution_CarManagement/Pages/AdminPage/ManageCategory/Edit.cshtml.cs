@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using DataAccess.Repositories;
+using Service;
+using Humanizer.Localisation;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICategoryService categoryService;
 
-        public EditModel(BusinessObjects.Models.CarManagementContext context)
+        public EditModel()
         {
-            _context = context;
+            categoryService = new CategoryService();
         }
 
         [BindProperty]
@@ -24,44 +27,37 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var category =  await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
-            {
-                return NotFound();
+                var category = categoryService.GetCategoryById((int)id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                Category = category;
+                return Page();
             }
-            Category = category;
-            return Page();
+            return RedirectToPage("/Login");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Category).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                categoryService.UpdateCategory(Category);
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!CategoryExists(Category.CategoryId))
                 {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
                 }
             }
 
@@ -70,7 +66,7 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
 
         private bool CategoryExists(int id)
         {
-          return (_context.Categories?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+            return categoryService.GetCategoryById((int)id) != null;
         }
     }
 }

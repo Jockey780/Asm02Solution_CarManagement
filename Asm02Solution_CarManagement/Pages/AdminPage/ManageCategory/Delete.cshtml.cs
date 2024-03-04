@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
+using Humanizer.Localisation;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICategoryService categoryService;
 
-        public DeleteModel(BusinessObjects.Models.CarManagementContext context)
+        public DeleteModel()
         {
-            _context = context;
+            categoryService = new CategoryService();
         }
 
         [BindProperty]
@@ -23,39 +25,35 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
+                var category = categoryService.GetCategoryById((int)id);
 
-            if (category == null)
-            {
-                return NotFound();
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    Category = category;
+                }
+                return Page();
             }
-            else 
-            {
-                Category = category;
-            }
-            return Page();
+            return RedirectToPage("/Login");
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category != null)
-            {
-                Category = category;
-                _context.Categories.Remove(Category);
-                await _context.SaveChangesAsync();
-            }
-
+            categoryService.DeleteCategory((int)id);
             return RedirectToPage("./Index");
         }
     }

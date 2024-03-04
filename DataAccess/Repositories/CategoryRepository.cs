@@ -14,5 +14,7 @@ namespace DataAccess.Repositories
         public List<int> GetCatagories()=>CategoryDAO.Instance.GetCatagories();
         public Category GetCategoryById(int id)=>CategoryDAO.Instance.GetCategoryById(id);
         public Category CreateCategory(Category category)=>CategoryDAO.Instance.CreateCategory(category);
+        public Category UpdateCategory(Category category)=>CategoryDAO.Instance.UpdateCategory(category);
+        public void DeleteCategory(int categoryId) => CategoryDAO.Instance.DeleteCategory(categoryId);
     }
 }

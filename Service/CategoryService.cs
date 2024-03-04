@@ -21,6 +21,8 @@ namespace Service
             return categoryRepository.CreateCategory(category);
         }
 
+        public void DeleteCategory(int id) => categoryRepository.DeleteCategory(id);
+
         public List<Category> GetAllCategory()
         {
             return categoryRepository.GetAllCategory();
@@ -34,6 +36,11 @@ namespace Service
         public Category GetCategoryById(int id)
         {
             return categoryRepository.GetCategoryById(id);
+        }
+
+        public Category UpdateCategory(Category category)
+        {
+            return categoryRepository.UpdateCategory(category);
         }
     }
 }
