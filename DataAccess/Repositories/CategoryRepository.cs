@@ -12,5 +12,6 @@ namespace DataAccess.Repositories
     {
         public List<Category> GetAllCategory()=>CategoryDAO.Instance.GetAllCategory();
         public List<int> GetCatagories()=>CategoryDAO.Instance.GetCatagories();
+        public Category GetCategoryById(int id)=>CategoryDAO.Instance.GetCategoryById(id);
     }
 }

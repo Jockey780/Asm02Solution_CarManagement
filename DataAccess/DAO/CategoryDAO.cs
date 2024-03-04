@@ -29,6 +29,21 @@ namespace DataAccess.DAO
             }
         }
 
+        public Category GetCategoryById(int id)
+        {
+            try
+            {
+                using (var dbContext = new CarManagementContext())
+                {
+                    return dbContext.Categories.SingleOrDefault(c => c.CategoryId == id);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public List<Category> GetAllCategory() 
         {
             List<Category> list = null;

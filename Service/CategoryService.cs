@@ -25,5 +25,10 @@ namespace Service
         {
             return categoryRepository.GetCatagories();
         }
+
+        public Category GetCategoryById(int id)
+        {
+            return categoryRepository.GetCategoryById(id);
+        }
     }
 }

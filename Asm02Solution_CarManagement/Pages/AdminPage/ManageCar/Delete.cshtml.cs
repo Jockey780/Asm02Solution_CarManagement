@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICarService carService;
 
-        public DeleteModel(BusinessObjects.Models.CarManagementContext context)
+        public DeleteModel()
         {
-            _context = context;
+            carService = new CarService();
         }
 
         [BindProperty]
@@ -23,12 +24,12 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (id == null || carService.GetCarsList() == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Cars.FirstOrDefaultAsync(m => m.CarId == id);
+            var car = carService.GetCarByID((int)id);
 
             if (car == null)
             {
@@ -43,20 +44,18 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (id == null || carService.GetCarsList() == null)
             {
                 return NotFound();
             }
-            var car = await _context.Cars.FindAsync(id);
+            var car = carService.GetCarByID((int)id);
 
             if (car != null)
             {
-                Car = car;
-                _context.Cars.Remove(Car);
-                await _context.SaveChangesAsync();
+                carService.DeleteCar((int)id);
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            return NotFound();
         }
     }
 }

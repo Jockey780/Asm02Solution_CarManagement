@@ -6,37 +6,46 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 {
     public class DetailsModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICarService carService;
+        private readonly ICategoryService categoryService;
 
-        public DetailsModel(BusinessObjects.Models.CarManagementContext context)
+        public DetailsModel()
         {
-            _context = context;
+            carService = new CarService();
+            categoryService = new CategoryService();
         }
 
-      public Car Car { get; set; } = default!; 
+        public Car Car { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var car = await _context.Cars.FirstOrDefaultAsync(m => m.CarId == id);
-            if (car == null)
-            {
-                return NotFound();
+                Car car = carService.GetCarByID((int)id);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    Car = car;
+                    Category = categoryService.GetCategoryById(Car.CategoryId);
+                }
+                return Page();
             }
-            else 
-            {
-                Car = car;
-            }
-            return Page();
+            return RedirectToPage("/Login");
         }
     }
 }

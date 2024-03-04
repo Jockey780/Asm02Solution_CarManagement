@@ -12,5 +12,8 @@ namespace Service
         public int GetNumberOfCars();
         public List<Car> GetCarsList();
         public Car CreateCars(Car car);
+        public Car GetCarByID(int id);
+        public Car UpdateCar(Car updateCar);
+        public bool DeleteCar(int carId);
     }
 }

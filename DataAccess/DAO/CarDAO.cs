@@ -76,5 +76,69 @@ namespace DataAccess.DAO
             }
             return car;
         }
+
+        public Car GetCarByID(int id)
+        {
+            Car car = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                car = dbContext.Cars.SingleOrDefault(c => c.CarId == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return car;
+        }
+
+        public Car UpdateCar(Car updateCar)
+        {
+            try
+            {
+                using (var dbContext = new CarManagementContext())
+                {
+                    var existingCar = dbContext.Cars.Find(updateCar.CarId);
+
+                    if (existingCar != null)
+                    {
+                        existingCar.CategoryId = updateCar.CategoryId;
+                        existingCar.CarName = updateCar.CarName;
+                        existingCar.Description = updateCar.Description;
+                        existingCar.UnitPrice = updateCar.UnitPrice;
+                        existingCar.UnitsInStock = updateCar.UnitsInStock;
+                        existingCar.CarStatus = updateCar.CarStatus;
+
+                        dbContext.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return updateCar;
+        }
+
+        public bool DeleteCar(int carId)
+        {
+            try
+            {
+                var carToDelete = dbContext.Cars.Find(carId);
+
+                if (carToDelete != null)
+                {
+                    dbContext.Cars.Remove(carToDelete);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

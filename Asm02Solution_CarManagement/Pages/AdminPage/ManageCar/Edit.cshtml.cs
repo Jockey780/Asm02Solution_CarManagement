@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICarService carService;
+        private readonly ICategoryService categoryService;
 
-        public EditModel(BusinessObjects.Models.CarManagementContext context)
+        public EditModel()
         {
-            _context = context;
+            carService = new CarService();
+            categoryService = new CategoryService();
         }
 
         [BindProperty]
@@ -24,35 +27,39 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var car =  await _context.Cars.FirstOrDefaultAsync(m => m.CarId == id);
-            if (car == null)
-            {
-                return NotFound();
+                var car = carService.GetCarByID((int)id);
+                var _categories = categoryService.GetCatagories();
+
+                var categories = _categories.Select(id => new SelectListItem
+                {
+                    Value = id.ToString(),
+                    Text = id.ToString()
+                }).ToList();
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                Car = car;
+                ViewData["CategoryId"] = new SelectList(categories, "Value", "Text");
+                return Page();
             }
-            Car = car;
-           ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            return Page();
+            return RedirectToPage("/Login");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Car).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                carService.UpdateCar(Car);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,7 +78,7 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 
         private bool CarExists(int id)
         {
-          return (_context.Cars?.Any(e => e.CarId == id)).GetValueOrDefault();
+            return carService.GetCarByID((int)id) != null;
         }
     }
 }

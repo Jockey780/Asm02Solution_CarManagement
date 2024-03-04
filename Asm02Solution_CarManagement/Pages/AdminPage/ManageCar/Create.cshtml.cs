@@ -26,16 +26,16 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
         {
             if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                var _categoryTypeList = categoryService.GetCatagories();
 
-                var categoryTypeList = _categoryTypeList.Select(id => new SelectListItem
+                var _categories = categoryService.GetCatagories();
+
+                var categories = _categories.Select(id => new SelectListItem
                 {
                     Value = id.ToString(),
                     Text = id.ToString()
                 }).ToList();
 
-
-                ViewData["CategoryId"] = new SelectList(categoryTypeList, "Value", "Text");
+                ViewData["CategoryId"] = new SelectList(categories, "Value", "Text");
                 return Page();
             }
             return RedirectToPage("/Login");

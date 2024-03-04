@@ -21,6 +21,16 @@ namespace Service
             return carRepository.CreateCars(car);
         }
 
+        public bool DeleteCar(int carId)
+        {
+            return carRepository.DeleteCar(carId);
+        }
+
+        public Car GetCarByID(int id)
+        {
+            return carRepository.GetCarByID(id);
+        }
+
         public List<Car> GetCarsList()
         {
             return carRepository.GetCarsList();
@@ -29,6 +39,11 @@ namespace Service
         public int GetNumberOfCars()
         {
             return carRepository.GetNumberOfCars();
+        }
+
+        public Car UpdateCar(Car updateCar)
+        {
+            return carRepository.UpdateCar(updateCar);
         }
     }
 }
