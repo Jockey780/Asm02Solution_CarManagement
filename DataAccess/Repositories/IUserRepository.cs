@@ -15,5 +15,7 @@ namespace DataAccess.Repositories
         public User GetUserByID(int id);
         public User CreateUserAccounts(User user);
         public User UpdateUsersAccount(User user);
+        public List<User> SearchUsers(string searchTerm);
+        public bool DeleteUser(int userId);
     }
 }

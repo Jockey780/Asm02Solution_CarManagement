@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly IUserService userService;
 
-        public DeleteModel(BusinessObjects.Models.CarManagementContext context)
+        public DeleteModel()
         {
-            _context = context;
+            userService = new UserService(); ;
         }
 
         [BindProperty]
@@ -23,12 +24,12 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (id == null || userService.GetUsersList() == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var user = userService.GetUserByID((int)id);
 
             if (user == null)
             {
@@ -43,20 +44,19 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (id == null || userService.GetUsersList() == null)
             {
                 return NotFound();
             }
-            var user = await _context.Users.FindAsync(id);
+
+            var user = userService.GetUserByID((int)id);
 
             if (user != null)
             {
-                User = user;
-                _context.Users.Remove(User);
-                await _context.SaveChangesAsync();
+                userService.DeleteUser((int)id);
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            return NotFound();
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Service
             return userRepository.CreateUserAccounts(user);
         }
 
+        public bool DeleteUser(int userId) => userRepository.DeleteUser(userId);
+
         public int GetNumberOfUserAccounts()
         {
             return userRepository.GetNumberOfUserAccounts();
@@ -39,6 +41,11 @@ namespace Service
         public List<User> GetUsersList()
         {
             return userRepository.GetUsersList();
+        }
+
+        public List<User> SearchUsers(string searchTerm)
+        {
+            return userRepository.SearchUsers(searchTerm);
         }
 
         public User UpdateUsersAccount(User user)

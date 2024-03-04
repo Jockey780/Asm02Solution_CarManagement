@@ -145,5 +145,40 @@ namespace DataAccess.DAO
 
             return existingAccount;
         }
+
+        public List<User> SearchUsers(string searchTerm)
+        {
+            searchTerm = searchTerm.ToLower();
+
+            var result = dbContext.Users
+                .Where(u => u.Email.ToLower().Contains(searchTerm) ||
+                            u.UserName.ToLower().Contains(searchTerm) ||
+                            u.City.ToLower().Contains(searchTerm) ||
+                            u.Country.ToLower().Contains(searchTerm))
+                .ToList();
+
+            return result;
+        }
+
+        public bool DeleteUser(int userId)
+        {
+            try
+            {
+                var userToDelete = dbContext.Users.Find(userId);
+
+                if (userToDelete != null)
+                {
+                    dbContext.Users.Remove(userToDelete);
+                    dbContext.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

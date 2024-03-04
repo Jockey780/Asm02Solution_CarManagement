@@ -16,5 +16,7 @@ namespace DataAccess.Repositories
         public List<User> GetUsersList() => UserDAO.Instance.GetUsersList();
         public User GetUserByID(int id) => UserDAO.Instance.GetUserByID(id);
         public User UpdateUsersAccount(User user) => UserDAO.Instance.UpdateUsersAccount(user);
+        public List<User> SearchUsers(string searchTerm)=>UserDAO.Instance.SearchUsers(searchTerm);
+        public bool DeleteUser(int userId) => UserDAO.Instance.DeleteUser(userId);
     }
 }
