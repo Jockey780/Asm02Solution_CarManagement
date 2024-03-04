@@ -2,7 +2,8 @@
 @model Asm02Solution_CarManagement.Pages.AdminPage.ManageUser.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
+    Layout = "/Pages/Shared/_LayoutAdminPage.cshtml";
 }
 
 <h1>Edit</h1>
@@ -44,11 +45,11 @@
                 <input asp-for="User.Birthday" class="form-control" />
                 <span asp-validation-for="User.Birthday" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label asp-for="User.Role" class="control-label"></label>
                 <input asp-for="User.Role" class="form-control" />
                 <span asp-validation-for="User.Role" class="text-danger"></span>
-            </div>
+            </div>-->
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

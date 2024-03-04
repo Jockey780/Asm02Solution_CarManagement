@@ -31,9 +31,19 @@ namespace Service
             return userRepository.GetUserByEmailAndPassword(email, password);
         }
 
+        public User GetUserByID(int id)
+        {
+            return userRepository.GetUserByID(id);
+        }
+
         public List<User> GetUsersList()
         {
             return userRepository.GetUsersList();
+        }
+
+        public User UpdateUsersAccount(User user)
+        {
+            return userRepository.UpdateUsersAccount(user);
         }
     }
 }

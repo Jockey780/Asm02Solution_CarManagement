@@ -14,5 +14,7 @@ namespace DataAccess.Repositories
         public User GetUserByEmailAndPassword(string email, string password) => UserDAO.Instance.GetUserByEmailAndPassword(email, password);
         public User CreateUserAccounts(User user) => UserDAO.Instance.CreateUserAccounts(user);
         public List<User> GetUsersList() => UserDAO.Instance.GetUsersList();
+        public User GetUserByID(int id) => UserDAO.Instance.GetUserByID(id);
+        public User UpdateUsersAccount(User user) => UserDAO.Instance.UpdateUsersAccount(user);
     }
 }

@@ -12,6 +12,8 @@ namespace Service
         public User GetUserByEmailAndPassword(string email, string password);
         public int GetNumberOfUserAccounts();
         public List<User> GetUsersList();
+        public User GetUserByID(int id);
         public User CreateUserAccounts(User user);
+        public User UpdateUsersAccount(User user);
     }
 }

@@ -70,6 +70,22 @@ namespace DataAccess.DAO
             return NumberOfUserAccounts;
         }
 
+        public User GetUserByID(int id)
+        {
+            User user = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                user = dbContext.Users.SingleOrDefault(m => m.UserId.Equals(id));
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return user;
+        }
+
         public User GetUserByEmail(string email)
         {
             User user = null;
@@ -103,6 +119,31 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
             return _customer;
+        }
+
+        public User UpdateUsersAccount(User user)
+        {
+            var existingAccount = dbContext.Users.Find(user.UserId);
+            try
+            {
+                if (existingAccount != null)
+                {
+                    existingAccount.Email = user.Email;
+                    existingAccount.UserName = user.UserName;
+                    existingAccount.City = user.City;
+                    existingAccount.Country = user.Country;
+                    existingAccount.Password = user.Password;
+                    existingAccount.Birthday = user.Birthday;
+
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return existingAccount;
         }
     }
 }

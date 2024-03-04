@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly IUserService userService;
 
-        public EditModel(BusinessObjects.Models.CarManagementContext context)
+        public EditModel()
         {
-            _context = context;
+            userService = new UserService();
         }
 
         [BindProperty]
@@ -24,34 +25,30 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                var user = userService.GetUserByID((int)id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                User = user;
+                return Page();
             }
-
-            var user =  await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            User = user;
-            return Page();
+            return RedirectToPage("/Login");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(User).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                User = userService.UpdateUsersAccount(User);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -59,18 +56,13 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
             }
-
             return RedirectToPage("./Index");
         }
 
         private bool UserExists(int id)
         {
-          return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+            return userService.GetUserByID((int)id) != null;
         }
     }
 }
