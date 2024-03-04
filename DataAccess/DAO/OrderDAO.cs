@@ -42,5 +42,10 @@ namespace DataAccess.DAO
             }
             return NumberOfOrders;
         }
+
+        public List<Order> GetOrdersList()
+        {
+            return dbContext.Orders.ToList();
+        }
     }
 }

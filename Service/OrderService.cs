@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories;
+﻿using BusinessObjects.Models;
+using DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,11 @@ namespace Service
         public int GetNumberOfOrders()
         {
             return orderRepository.GetNumberOfOrders();
+        }
+
+        public List<Order> GetOrdersList()
+        {
+            return orderRepository.GetOrdersList();
         }
     }
 }
