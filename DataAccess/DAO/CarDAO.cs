@@ -58,5 +58,23 @@ namespace DataAccess.DAO
             }
             return list;
         }
+
+        public Car CreateCars(Car car)
+        {
+            try
+            {
+                if (car != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Cars.Add(car);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return car;
+        }
     }
 }

@@ -16,6 +16,11 @@ namespace Service
             carRepository = new CarRepository();
         }
 
+        public Car CreateCars(Car car)
+        {
+            return carRepository.CreateCars(car);
+        }
+
         public List<Car> GetCarsList()
         {
             return carRepository.GetCarsList();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObjects.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace Service
 {
     public interface ICategoryService
     {
+        public List<Category> GetAllCategory();
+        public List<int> GetCatagories();
     }
 }

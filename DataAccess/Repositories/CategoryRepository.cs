@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObjects.Models;
+using DataAccess.DAO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,7 @@ namespace DataAccess.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
+        public List<Category> GetAllCategory()=>CategoryDAO.Instance.GetAllCategory();
+        public List<int> GetCatagories()=>CategoryDAO.Instance.GetCatagories();
     }
 }

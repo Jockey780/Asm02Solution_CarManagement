@@ -11,5 +11,6 @@ namespace DataAccess.Repositories
     {
         public int GetNumberOfCars();
         public List<Car> GetCarsList();
+        public Car CreateCars(Car car);
     }
 }

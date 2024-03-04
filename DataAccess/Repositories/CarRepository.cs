@@ -12,5 +12,6 @@ namespace DataAccess.Repositories
     {
         public int GetNumberOfCars() => CarDAO.Instance.GetNumberOfCars();
         public List<Car> GetCarsList() => CarDAO.Instance.GetCarsList();
+        public Car CreateCars(Car car)=> CarDAO.Instance.CreateCars(car);
     }
 }

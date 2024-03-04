@@ -6,39 +6,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObjects.Models;
+using Service;
+using System.Security.Principal;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
 {
     public class CreateModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly ICarService carService;
+        private readonly ICategoryService categoryService;
 
-        public CreateModel(BusinessObjects.Models.CarManagementContext context)
+        public CreateModel()
         {
-            _context = context;
+            carService = new CarService();
+            categoryService = new CategoryService();
         }
 
         public IActionResult OnGet()
         {
-        ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            return Page();
+            if (HttpContext.Session.GetString("Role") == "Admin")
+            {
+                var _categoryTypeList = categoryService.GetCatagories();
+
+                var categoryTypeList = _categoryTypeList.Select(id => new SelectListItem
+                {
+                    Value = id.ToString(),
+                    Text = id.ToString()
+                }).ToList();
+
+
+                ViewData["CategoryId"] = new SelectList(categoryTypeList, "Value", "Text");
+                return Page();
+            }
+            return RedirectToPage("/Login");
         }
 
         [BindProperty]
         public Car Car { get; set; } = default!;
-        
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
-        {
-          if (!ModelState.IsValid || _context.Cars == null || Car == null)
+        {          
+            Car result = carService.CreateCars(Car);
+            if (result != null)
             {
-                return Page();
+                ViewData["notification"] = "Email is existed";
+                return OnGet();
             }
-
-            _context.Cars.Add(Car);
-            await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
         }
     }

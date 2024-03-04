@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObjects.Models;
+using DataAccess.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,20 @@ namespace Service
 {
     public class CategoryService : ICategoryService
     {
+        private ICategoryRepository categoryRepository;
+        public CategoryService()
+        {
+            categoryRepository = new CategoryRepository();
+        }
+
+        public List<Category> GetAllCategory()
+        {
+            return categoryRepository.GetAllCategory();
+        }
+
+        public List<int> GetCatagories()
+        {
+            return categoryRepository.GetCatagories();
+        }
     }
 }
