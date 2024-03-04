@@ -43,6 +43,11 @@ namespace Service
             return userRepository.GetUsersList();
         }
 
+        public List<int> GetUserTypeList()
+        {
+            return userRepository.GetUserTypeList();
+        }
+
         public List<User> SearchUsers(string searchTerm)
         {
             return userRepository.SearchUsers(searchTerm);

@@ -14,10 +14,12 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
     public class IndexModel : PageModel
     {
         private readonly IOrderService orderService;
+        private readonly IUserService userService;
 
         public IndexModel()
         {
             orderService = new OrderService();
+            userService = new UserService();
         }
 
         public IList<Order> Order { get; set; } = default!;

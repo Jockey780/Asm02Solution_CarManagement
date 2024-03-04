@@ -6,16 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly IOrderService orderService;
 
-        public DeleteModel(BusinessObjects.Models.CarManagementContext context)
+        public DeleteModel()
         {
-            _context = context;
+            orderService = new OrderService();
         }
 
         [BindProperty]
@@ -23,12 +24,15 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Orders == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
             }
 
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
+            var order = orderService.GetOrderByID((int)id);
 
             if (order == null)
             {
@@ -43,19 +47,11 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Orders == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var order = await _context.Orders.FindAsync(id);
-
-            if (order != null)
-            {
-                Order = order;
-                _context.Orders.Remove(Order);
-                await _context.SaveChangesAsync();
-            }
-
+            var order = orderService.DeleteOrder((int)id);
             return RedirectToPage("./Index");
         }
     }

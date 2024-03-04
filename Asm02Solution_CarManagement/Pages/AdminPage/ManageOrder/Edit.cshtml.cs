@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly IOrderService orderService;
+        private readonly IUserService userService;
 
-        public EditModel(BusinessObjects.Models.CarManagementContext context)
+        public EditModel()
         {
-            _context = context;
+            orderService = new OrderService();
+            userService = new UserService();
         }
 
         [BindProperty]
@@ -24,35 +28,41 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Orders == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
 
-            var order =  await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
-            if (order == null)
-            {
-                return NotFound();
+                var UserTypeList = userService.GetUserTypeList();
+
+                var userSelectList = UserTypeList.Select(id => new SelectListItem
+                {
+                    Value = id.ToString(),
+                    Text = id.ToString()
+                }).ToList();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var order = orderService.GetOrderByID((int)id);
+
+                if (order == null)
+                {
+                    return NotFound();
+                }
+                Order = order;
+                ViewData["UserId"] = new SelectList(userSelectList, "Value", "Text");
+                return Page();
             }
-            Order = order;
-           ViewData["UserId"] = new SelectList(_context.Users, "UserId", "City");
-            return Page();
+            return RedirectToPage("/Login");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Order).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                Order = orderService.UpdateOrder(Order);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -65,13 +75,12 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
                     throw;
                 }
             }
-
             return RedirectToPage("./Index");
         }
 
         private bool OrderExists(int id)
         {
-          return (_context.Orders?.Any(e => e.OrderId == id)).GetValueOrDefault();
+          return orderService.GetOrderByID((int)id) != null;
         }
     }
 }

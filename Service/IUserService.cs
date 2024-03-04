@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Models;
+using DataAccess.DAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Service
         public int GetNumberOfUserAccounts();
         public List<User> GetUsersList();
         public User GetUserByID(int id);
+        public List<int> GetUserTypeList();
         public User CreateUserAccounts(User user);
         public User UpdateUsersAccount(User user);
         public List<User> SearchUsers(string searchTerm);

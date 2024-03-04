@@ -47,5 +47,79 @@ namespace DataAccess.DAO
         {
             return dbContext.Orders.ToList();
         }
+
+        public Order GetOrderByID(int id)
+        {
+            Order order = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                order = dbContext.Orders.SingleOrDefault(c => c.OrderId == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return order;
+        }
+
+        public Order CreateOrders(Order order)
+        {
+            try
+            {
+                if (order != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Orders.Add(order);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return order;
+        }
+
+        public Order UpdateOrder(Order order)
+        {
+            try
+            {
+                if (order != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Orders.Update(order);
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("The order is not existed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return order;
+        }
+
+        public Order DeleteOrder(int orderID)
+        {
+            Order order = GetOrderByID(orderID);
+            try
+            {
+                if (order != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Orders.Remove(order);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return order;
+        }
     }
 }

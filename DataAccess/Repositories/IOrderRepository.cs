@@ -11,5 +11,9 @@ namespace DataAccess.Repositories
     {
         public int GetNumberOfOrders();
         public List<Order> GetOrdersList();
+        public Order GetOrderByID(int id);
+        public Order CreateOrders(Order order);
+        public Order UpdateOrder(Order order);
+        public Order DeleteOrder(int orderID);
     }
 }

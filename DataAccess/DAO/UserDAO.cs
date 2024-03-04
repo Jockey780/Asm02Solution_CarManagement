@@ -180,5 +180,24 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<int> GetUserTypeList()
+        {
+            List<int> userTypes;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                userTypes = dbContext.Users
+                .Where(user => user.UserId != null)
+                .Select(user => user.UserId)
+                .Distinct()
+                .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return userTypes;
+        }
     }
 }
