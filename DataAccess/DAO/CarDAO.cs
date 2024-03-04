@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,21 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
             return NumberOfCars;
+        }
+
+        public List<Car> GetCarsList()
+        {
+            List<Car> list = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                list = dbContext.Cars.Include(c=>c.Category).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return list;
         }
     }
 }

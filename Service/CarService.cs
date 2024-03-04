@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories;
+﻿using BusinessObjects.Models;
+using DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace Service
         public CarService()
         {
             carRepository = new CarRepository();
+        }
+
+        public List<Car> GetCarsList()
+        {
+            return carRepository.GetCarsList();
         }
 
         public int GetNumberOfCars()
