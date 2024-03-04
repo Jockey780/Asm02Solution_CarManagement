@@ -16,6 +16,11 @@ namespace Service
             categoryRepository = new CategoryRepository();
         }
 
+        public Category CreateCategory(Category category)
+        {
+            return categoryRepository.CreateCategory(category);
+        }
+
         public List<Category> GetAllCategory()
         {
             return categoryRepository.GetAllCategory();

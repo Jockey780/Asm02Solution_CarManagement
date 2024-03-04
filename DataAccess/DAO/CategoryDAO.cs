@@ -29,6 +29,22 @@ namespace DataAccess.DAO
             }
         }
 
+        public Category GetCategoryByName(string categoryName)
+        {
+            Category category = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                category = dbContext.Categories.SingleOrDefault(m => m.CategoryName.Equals(categoryName));
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return category;
+        }
+
         public Category GetCategoryById(int id)
         {
             try
@@ -76,6 +92,29 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
             return catagories;
+        }
+
+        public Category CreateCategory(Category category)
+        {
+            Category _category = GetCategoryByName(category.CategoryName);
+            try
+            {
+                if (_category == null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.Categories.Add(category);
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("The customer is existed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return category;
         }
     }
 }

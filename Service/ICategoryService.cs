@@ -12,5 +12,6 @@ namespace Service
         public List<Category> GetAllCategory();
         public List<int> GetCatagories();
         public Category GetCategoryById(int id);
+        public Category CreateCategory(Category category);
     }
 }
