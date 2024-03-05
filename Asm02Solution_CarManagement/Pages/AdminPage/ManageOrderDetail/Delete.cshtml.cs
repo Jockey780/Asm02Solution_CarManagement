@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
+using System.Net;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrderDetail
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly IOrderDetailService orderDetailService;
 
-        public DeleteModel(BusinessObjects.Models.CarManagementContext context)
+        public DeleteModel()
         {
-            _context = context;
+            orderDetailService = new OrderDetailService();
         }
 
         [BindProperty]
@@ -23,39 +25,35 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrderDetail
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.OrderDetails == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var orderdetail = await _context.OrderDetails.FirstOrDefaultAsync(m => m.OrderId == id);
+                var orderdetail = orderDetailService.GetOrderDetailByID((int)id);
 
-            if (orderdetail == null)
-            {
-                return NotFound();
+                if (orderdetail == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    OrderDetail = orderdetail;
+                }
+                return Page();
             }
-            else 
-            {
-                OrderDetail = orderdetail;
-            }
-            return Page();
+            return RedirectToPage("/Login");
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.OrderDetails == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var orderdetail = await _context.OrderDetails.FindAsync(id);
-
-            if (orderdetail != null)
-            {
-                OrderDetail = orderdetail;
-                _context.OrderDetails.Remove(OrderDetail);
-                await _context.SaveChangesAsync();
-            }
-
+            var orderdetail = orderDetailService.DeleteOrderDetail((int)id);
             return RedirectToPage("./Index");
         }
     }

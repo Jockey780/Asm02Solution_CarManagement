@@ -59,6 +59,25 @@ namespace DataAccess.DAO
             return list;
         }
 
+        public List<int> GetCarType()
+        {
+            List<int> carTypes;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                carTypes = dbContext.Cars
+                .Where(car => car.CarId != null)
+                .Select(car => car.CarId)
+                .Distinct()
+                .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return carTypes;
+        }
+
         public Car CreateCars(Car car)
         {
             try

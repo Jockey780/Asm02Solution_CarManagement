@@ -29,6 +29,25 @@ namespace DataAccess.DAO
             }
         }
 
+        public List<int> GetOrderDetailType()
+        {
+            List<int> OrderDetailTypes;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                OrderDetailTypes = dbContext.Orders
+                .Where(car => car.OrderId != null)
+                .Select(car => car.OrderId)
+                .Distinct()
+                .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return OrderDetailTypes;
+        }
+
         public List<OrderDetail> GetOrderDetailList()
         {
             List<OrderDetail> list = null;
@@ -65,6 +84,73 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
             return list;
+        }
+
+        public OrderDetail GetOrderDetailByID(int orderID)
+        {
+            OrderDetail orderDetail = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                orderDetail = dbContext.OrderDetails.SingleOrDefault(c => c.OrderId == orderID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return orderDetail;
+        }
+
+        public OrderDetail CreateOrderDetail(OrderDetail orderDetail)
+        {
+            try
+            {
+                if (orderDetail != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.OrderDetails.Add(orderDetail);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return orderDetail;
+        }
+
+        public OrderDetail UpdateOrderDetail(OrderDetail orderDetail)
+        {
+            try
+            {
+                if (orderDetail != null)
+                {
+                    var dbContext = new CarManagementContext();
+                    dbContext.OrderDetails.Update(orderDetail);
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("The order is not existed.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return orderDetail;
+        }
+
+        public OrderDetail DeleteOrderDetail(int orderDetailID)
+        {
+            OrderDetail orderDetail = GetOrderDetailByID(orderDetailID) ;
+            if (orderDetail != null)
+            {
+                var dbContext = new CarManagementContext();
+                dbContext.OrderDetails.Remove(orderDetail);
+                dbContext.SaveChanges();
+            }
+            return orderDetail;
         }
     }
 }

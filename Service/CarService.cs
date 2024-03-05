@@ -36,6 +36,11 @@ namespace Service
             return carRepository.GetCarsList();
         }
 
+        public List<int> GetCarType()
+        {
+            return carRepository.GetCarType();
+        }
+
         public int GetNumberOfCars()
         {
             return carRepository.GetNumberOfCars();

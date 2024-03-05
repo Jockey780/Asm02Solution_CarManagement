@@ -6,7 +6,7 @@
     Layout = "/Pages/Shared/_LayoutAdminPage.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Order detail management</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -51,9 +51,8 @@
                 @Html.DisplayFor(modelItem => item.Order.OrderId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-page="./Edit" asp-route-id="@item.OrderId">Edit</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.OrderId">Delete</a>
             </td>
         </tr>
 }

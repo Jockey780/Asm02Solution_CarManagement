@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
+using Service;
+using System.Net;
 
 namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrderDetail
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObjects.Models.CarManagementContext _context;
+        private readonly IOrderDetailService orderDetailService;
+        private readonly ICarService carService;
 
-        public EditModel(BusinessObjects.Models.CarManagementContext context)
+        public EditModel()
         {
-            _context = context;
+            orderDetailService = new OrderDetailService();
+            carService = new CarService();
         }
 
         [BindProperty]
@@ -24,36 +28,48 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrderDetail
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.OrderDetails == null)
+            if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var orderdetail =  await _context.OrderDetails.FirstOrDefaultAsync(m => m.OrderId == id);
-            if (orderdetail == null)
-            {
-                return NotFound();
+                var orderdetail = orderDetailService.GetOrderDetailByID((int)id);
+                if (orderdetail == null)
+                {
+                    return NotFound();
+                }
+
+                var CarTypeList = carService.GetCarType();
+                var OrderTypeList = orderDetailService.GetOrderDetailType();
+
+                var carSelectList = CarTypeList.Select(id => new SelectListItem
+                {
+                    Value = id.ToString(),
+                    Text = id.ToString()
+                }).ToList();
+                var orderSelectList = OrderTypeList.Select(id => new SelectListItem
+                {
+                    Value = id.ToString(),
+                    Text = id.ToString()
+                }).ToList();
+
+                OrderDetail = orderdetail;
+                ViewData["CarId"] = new SelectList(carSelectList, "Value", "Text");
+                ViewData["OrderId"] = new SelectList(orderSelectList, "Value", "Text");
+                return Page();
             }
-            OrderDetail = orderdetail;
-           ViewData["CarId"] = new SelectList(_context.Cars, "CarId", "CarName");
-           ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId");
-            return Page();
-        }
+            return RedirectToPage("/Login");
+        }            
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(OrderDetail).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                OrderDetail = orderDetailService.UpdateOrderDetail(OrderDetail);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -72,7 +88,7 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrderDetail
 
         private bool OrderDetailExists(int id)
         {
-          return (_context.OrderDetails?.Any(e => e.OrderId == id)).GetValueOrDefault();
+          return orderDetailService.GetOrderDetailByID((int)id) != null;
         }
     }
 }
