@@ -18,7 +18,7 @@ Các chức năng đã thực hiện
 	- Admin có thể xem và chỉnh sửa(CRUD) User, Cars, Category, Order và Order detail 
 		- có thể Search các thành phần trên(trừ Order detail)
 
-	- Customer khi đang nhập thì nó chỉ show User Profile của Customer đó và có thể edit
+	- Customer khi đang nhập thì chỉ show User Profile của Customer đó và có thể edit
 
  
 Bug:
