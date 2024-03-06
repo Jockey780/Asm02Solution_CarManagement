@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessObjects.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using Service;
 
 namespace Asm02Solution_CarManagement.Pages
@@ -11,6 +13,9 @@ namespace Asm02Solution_CarManagement.Pages
         {
             this.userService = userService;
         }
+
+        [BindProperty]
+        public User User { get; set; } = default!;
 
         public IActionResult OnPostLogin()
         {
@@ -25,6 +30,10 @@ namespace Asm02Solution_CarManagement.Pages
                 return Page();
             }
 
+            var userJson = JsonConvert.SerializeObject(user);
+
+            HttpContext.Session.SetString("User", userJson);
+
             if (user.Role == "Admin")
             {
                 // Đăng nhập thành công cho Admin, 
@@ -34,10 +43,9 @@ namespace Asm02Solution_CarManagement.Pages
             }
             else if (user.Role == "Customer")
             {
-                // Đăng nhập thành công cho Customer, .
                 HttpContext.Session.SetString("Email", user.Email);
                 HttpContext.Session.SetString("Role", user.Role);
-                return RedirectToPage("/CustomerPage/ListProfile");
+                return RedirectToPage("/CustomerPage/UserProfile");
             }
             else
             {

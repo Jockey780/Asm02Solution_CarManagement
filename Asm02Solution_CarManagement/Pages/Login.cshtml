@@ -4,22 +4,23 @@
     ViewData["Title"] = "Home page";
 }
 
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <div>
-        <h2>Login</h2>
+    <h1 class="display-4" style="margin-bottom: 20px;">Login</h1>
+    <div style="margin-bottom: 10px;">
         <form method="post" asp-page-handler="Login">
             @Html.AntiForgeryToken()
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required>
 
-            <br>
+            <div style="margin-bottom: 10px;">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <br>
+            <div style="margin-bottom: 10px;">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
 
             <button type="submit">Login</button>
         </form>

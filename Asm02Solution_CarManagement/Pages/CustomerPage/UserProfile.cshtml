@@ -1,16 +1,12 @@
 ﻿@page
-@model Asm02Solution_CarManagement.Pages.AdminPage.ManageUser.IndexModel
+@model Asm02Solution_CarManagement.Pages.CustomerPage.UserProfileModel
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "/Pages/Shared/_LayoutAdminPage.cshtml";
+    Layout = "/Pages/Shared/_LayoutCustomersPage.cshtml";
 }
 
-<h1>User accounts management</h1>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<h1>User profile</h1>
 
 <table class="table">
     <thead>
@@ -32,9 +28,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.User[0].Birthday)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Role)
             </th>
             <th></th>
         </tr>
@@ -60,20 +53,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Birthday)
             </td>
-                <td>
-                    @if (item.Role == "Admin")
-                    {
-                        <span class="text-primary">Admin</span>
-                    }
-                    else if (item.Role == "Customer")
-                    {
-                        <span class="text-info">Customer</span>
-                    }
-                </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a>
             </td>
         </tr>
 }

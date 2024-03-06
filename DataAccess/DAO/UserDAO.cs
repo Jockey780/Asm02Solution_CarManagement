@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,7 +52,17 @@ namespace DataAccess.DAO
         }
         public List<User> GetUsersList()
         {
-            return dbContext.Users.ToList();
+            List<User> list = null;
+            try
+            {
+                var dbContext = new CarManagementContext();
+                list = dbContext.Users.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return list;
         }
 
         // thêm hàm này để hiện tổng User account trên dashboard
