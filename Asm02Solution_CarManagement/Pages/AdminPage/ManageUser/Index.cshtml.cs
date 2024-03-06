@@ -44,7 +44,10 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
                 // Filter the users based on the search value
                 if (!string.IsNullOrEmpty(SearchTerm))
                 {
-                    users = users.Where(u => u.Email.Contains(SearchTerm) || u.UserName.Contains(SearchTerm));
+                    users = users.Where(u => u.Email.Contains(SearchTerm) ||
+                    u.City.Contains(SearchTerm) ||
+                    u.Country.Contains(SearchTerm) ||
+                    u.UserName.Contains(SearchTerm));
                 }
 
                 User = users.ToList();

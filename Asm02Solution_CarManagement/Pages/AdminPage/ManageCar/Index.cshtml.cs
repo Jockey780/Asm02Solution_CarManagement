@@ -43,7 +43,7 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
                 // Filter the cars based on the search value
                 if (!string.IsNullOrEmpty(SearchTerm))
                 {
-                    cars = cars.Where(c => c.CarName.Contains(SearchTerm) || c.Category.ToString() == SearchTerm).ToList();
+                    cars = cars.Where(c => c.CarName.Contains(SearchTerm) || c.CategoryId.ToString() == SearchTerm).ToList();
                 }
 
                 Car = cars.Count > 0 ? cars : Car;
