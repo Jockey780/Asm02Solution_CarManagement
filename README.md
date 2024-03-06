@@ -26,6 +26,7 @@ Bug:
 - Bug không show được CustomerName trong order và Car trong orderdetails.
 - Bug khi create new car thì ko tự động nhảy sang trang index.
 
+
 Tổng kết
 (với đây là lần đầu em là host GitHub nếu có sai sót gì mong thầy thông cảm)
 
