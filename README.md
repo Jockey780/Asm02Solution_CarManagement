@@ -19,7 +19,8 @@ Các chức năng đã thực hiện
 		- có thể Search các thành phần trên(trừ Order detail)
 
 	- Customer khi đang nhập thì nó chỉ show User Profile của Customer đó và có thể edit
-Bug: 
+Bug:
+
 - Bug Order và User Profile khi edit xong, chưa thay đổi gì ngay lập tức bên trang Index nhứng có thay đổi trong DB.
 - Register (không tăng số Id cho mỗi lần User đăng kí => không Register được).
 - Bug không show được CustomerName trong order và Car trong orderdetails.
