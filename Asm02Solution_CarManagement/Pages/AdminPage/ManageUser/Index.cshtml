@@ -12,6 +12,14 @@
     <a asp-page="Create">Create New</a>
 </p>
 
+<form method="get">
+    <div>
+        <label for="searchTerm">Search Customer:</label>
+        <input type="text" id="searchTerm" name="SearchTerm" placeholder="Enter customer name or email" value="@Model.SearchTerm">
+        <button type="submit">Search</button>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>

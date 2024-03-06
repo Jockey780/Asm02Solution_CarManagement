@@ -16,12 +16,22 @@ namespace Service
             userRepository = new UserRepository();
         }
 
+        public Task<int> AddUserAsync(User user)
+        {
+            return userRepository.AddUserAsync(user);
+        }
+
         public User CreateUserAccounts(User user)
         {
             return userRepository.CreateUserAccounts(user);
         }
 
         public bool DeleteUser(int userId) => userRepository.DeleteUser(userId);
+
+        public int GetNextUserId()
+        {
+            return userRepository.GetNextUserId();
+        }
 
         public int GetNumberOfUserAccounts()
         {

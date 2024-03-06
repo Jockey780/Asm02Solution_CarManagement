@@ -18,6 +18,8 @@ namespace DataAccess.Repositories
         public List<int> GetUserTypeList() => UserDAO.Instance.GetUserTypeList();
         public User UpdateUsersAccount(User user) => UserDAO.Instance.UpdateUsersAccount(user);
         public List<User> SearchUsers(string searchTerm)=>UserDAO.Instance.SearchUsers(searchTerm);
-        public bool DeleteUser(int userId) => UserDAO.Instance.DeleteUser(userId);        
+        public bool DeleteUser(int userId) => UserDAO.Instance.DeleteUser(userId);
+        public int GetNextUserId()=>UserDAO.Instance.GetNextUserId();
+        Task<int> IUserRepository.AddUserAsync(User user) => UserDAO.Instance.AddUserAsync(user);
     }
 }

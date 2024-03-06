@@ -19,13 +19,35 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCar
             carService = new CarService();
         }
 
-        public IList<Car> Car { get;set; } = default!;
+        public IList<Car> Car { get; set; } = new List<Car>();
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+
+        //public IActionResult OnGetAsync()
+        //{
+        //    if (HttpContext.Session.GetString("Role") == "Admin")
+        //    {
+        //        Car = carService.GetCarsList();
+        //        return Page();
+        //    }
+        //    return RedirectToPage("/Login");
+        //}
 
         public IActionResult OnGetAsync()
         {
             if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                Car = carService.GetCarsList();
+                // Get the list of cars
+                var cars = carService.GetCarsList();
+
+                // Filter the cars based on the search value
+                if (!string.IsNullOrEmpty(SearchTerm))
+                {
+                    cars = cars.Where(c => c.CarName.Contains(SearchTerm) || c.Category.ToString() == SearchTerm).ToList();
+                }
+
+                Car = cars.Count > 0 ? cars : Car;
+
                 return Page();
             }
             return RedirectToPage("/Login");

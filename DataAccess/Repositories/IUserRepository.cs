@@ -18,5 +18,7 @@ namespace DataAccess.Repositories
         public List<User> SearchUsers(string searchTerm);
         public bool DeleteUser(int userId);
         public List<int> GetUserTypeList();
+        public int GetNextUserId();
+        Task<int> AddUserAsync(User user);
     }
 }

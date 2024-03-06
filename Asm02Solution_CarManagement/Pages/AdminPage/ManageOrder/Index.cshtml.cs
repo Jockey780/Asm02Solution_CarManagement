@@ -22,13 +22,26 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageOrder
             userService = new UserService();
         }
 
-        public IList<Order> Order { get; set; } = default!;
+        public IList<Order> Order { get; set; } = new List<Order>();
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
 
         public IActionResult OnGetAsync()
         {
             if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                Order = orderService.GetOrdersList();
+                // Get the list of categories
+                var orders = orderService.GetOrdersList();
+
+                // Filter the categories based on the search value
+                if (!string.IsNullOrEmpty(SearchTerm))
+                {
+                    orders = orders.Where(o => o.OrderStatus.Contains(SearchTerm)).ToList();
+                }
+
+                Order = orders.Count > 0 ? orders : Order;
+
                 return Page();
             }
             return RedirectToPage("/Login");

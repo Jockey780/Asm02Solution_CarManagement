@@ -29,6 +29,28 @@ namespace DataAccess.DAO
             }
         }
 
+        public int GetNextUserId()
+        {
+            // Lấy UserId lớn nhất trong cơ sở dữ liệu và tăng lên 1
+            int nextUserId = dbContext.Users.Max(u => (int?)u.UserId) ?? 0;
+            return nextUserId + 1;
+        }
+
+        public async Task<int> AddUserAsync(User user)
+        {
+            try
+            {
+                dbContext.Users.Add(user);
+                await dbContext.SaveChangesAsync();
+                return user.UserId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return -1;
+            }
+        }
+
         public User GetUserByEmailAndPassword(string email, string password)
         {
             var user = dbContext.Users.SingleOrDefault(u => u.Email == email && u.Password == password);

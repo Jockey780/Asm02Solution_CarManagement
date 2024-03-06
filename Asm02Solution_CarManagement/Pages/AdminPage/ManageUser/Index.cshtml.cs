@@ -21,11 +21,34 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageUser
 
         public IList<User> User { get;set; } = default!;
 
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+
+        //public IActionResult OnGetAsync()
+        //{
+        //    if (HttpContext.Session.GetString("Role") == "Admin")
+        //    {
+        //        User = userService.GetUsersList().Where(a => a.Role == "Customer").ToList();
+        //        return Page();
+        //    }
+        //    return RedirectToPage("/Login");
+        //}
+
         public IActionResult OnGetAsync()
         {
             if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                User = userService.GetUsersList().Where(a => a.Role == "Customer").ToList();
+                // Get the list of users
+                var users = userService.GetUsersList().Where(a => a.Role == "Customer");
+
+                // Filter the users based on the search value
+                if (!string.IsNullOrEmpty(SearchTerm))
+                {
+                    users = users.Where(u => u.Email.Contains(SearchTerm) || u.UserName.Contains(SearchTerm));
+                }
+
+                User = users.ToList();
+
                 return Page();
             }
             return RedirectToPage("/Login");

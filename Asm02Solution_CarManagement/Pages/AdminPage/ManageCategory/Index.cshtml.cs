@@ -20,13 +20,36 @@ namespace Asm02Solution_CarManagement.Pages.AdminPage.ManageCategory
             categoryService = new CategoryService();
         }
 
-        public IList<Category> Category { get;set; } = default!;
+        public IList<Category> Category { get; set; } = new List<Category>();
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+
+        //public IActionResult OnGetAsync()
+        //{
+        //    if (HttpContext.Session.GetString("Role") == "Admin")
+        //    {
+        //        Category = categoryService.GetAllCategory();
+        //        return Page();
+        //    }
+        //    return RedirectToPage("/Login");
+        //}
 
         public IActionResult OnGetAsync()
         {
             if (HttpContext.Session.GetString("Role") == "Admin")
             {
-                Category = categoryService.GetAllCategory();
+                // Get the list of categories
+                var categories = categoryService.GetAllCategory();
+
+                // Filter the categories based on the search value
+                if (!string.IsNullOrEmpty(SearchTerm))
+                {
+                    categories = categories.Where(c => c.CategoryName.Contains(SearchTerm)).ToList();
+                }
+
+                Category = categories.Count > 0 ? categories : Category;
+
                 return Page();
             }
             return RedirectToPage("/Login");

@@ -19,5 +19,7 @@ namespace Service
         public User UpdateUsersAccount(User user);
         public List<User> SearchUsers(string searchTerm);
         public bool DeleteUser(int userId);
+        public int GetNextUserId();
+        Task<int> AddUserAsync(User user);
     }
 }
