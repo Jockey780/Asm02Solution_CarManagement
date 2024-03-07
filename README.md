@@ -13,12 +13,12 @@ Các chức năng đã thực hiện
 	- Có chức năng phần quyền cho từng Roles(Admin và Customer)
    
 - Sau khi Login thành công:
-	- Mỗi user sẽ có những window riêng
+	- Mỗi user sẽ có những Pages riêng
 	- Có thể Log out	
 	- Admin có thể xem và chỉnh sửa(CRUD) User, Cars, Category, Order và Order detail 
 		- có thể Search các thành phần trên(trừ Order detail)
 
-	- Customer khi đang nhập thì chỉ show User Profile của Customer đó và có thể edit
+	- Customer khi đang nhập thì chỉ đơn giản show User Profile của Customer đó và có thể edit
 
  
 Bug:
