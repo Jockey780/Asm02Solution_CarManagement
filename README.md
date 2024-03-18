@@ -1,4 +1,5 @@
-Link Youtube: [https://youtu.be/xpG1VdDwh1I](https://youtu.be/xpG1VdDwh1I)https://youtu.be/xpG1VdDwh1I
+Link Youtube: [[https://youtu.be/xpG1VdDwh1I](https://youtu.be/xpG1VdDwh1I)https://youtu.be/xpG1VdDwh1I](https://youtu.be/1yUHESSxO6E)
+- Video này em up lên là hôm nay em có phát hiện là link youtube trên github Assignment 2 là em gửi nhầm video test thử thuyết trình của em chứ không có gian dối gì đâu thầy. Em xin cảm ơn
 
 Mô tả bài chi tiết Assigment 2 Razor Page
 	Lê Hoàng Minh Nhật 
