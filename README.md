@@ -1,6 +1,11 @@
 Link Youtube: https://youtu.be/iG-RLWj-ysY
 - Video này em up lên là hôm nay em có phát hiện là link youtube trên github Assignment 2 là em gửi nhầm video test thử thuyết trình của em chứ không có gian dối gì đâu thầy. Em xin cảm ơn
 
+  Bằng chứng cho video trên:
+  
+![image](https://github.com/Jockey780/Asm02Solution_CarManagement/assets/97488924/f5d8d2f2-cc8a-4ffe-82f7-bde31c5e6909)
+
+
 Mô tả bài chi tiết Assigment 2 Razor Page
 	Lê Hoàng Minh Nhật 
 	SE161790 
